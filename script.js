@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (pageNum === 3) {
       const texts = [
         "i know i gave this to you one day late and its my bad, btw this is not only the thing i got for u , this is like 25% of what i made hahaha",
-        "i think i have some chocolates in my bags, i will mail them to you through gmail trust me. oh man this took 5 days to make and 8 hours to publish, my brain is fried... at some point when i was making this card, i almost broke my setup cuz of frustation at it was 1am when i finished this, the birthday was literally over bruh"
+        "i think i have some chocolates in my bags, i will mail them to you through gmail trust me. man this took soo long to make hope you like it"
       ];
 
       texts.forEach((text, index) => {
@@ -342,6 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
 
 
 
