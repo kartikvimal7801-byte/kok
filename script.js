@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const texts = [
         "remember the time u asked me that how do i know everything abt that one first house changing story? well lets just say when i have a seroius conversation with someone i remember every part of it",
         "in 2019-20 friendship started with \"hello\" but in 2025 it started with \"im your uber driver\", unique way bro. even albert eistien take lessons from me",
-        "my brain was stuck in loading load when the school reopened after corona hahahaha"
+        "my brain was stuck in loading mode when the school reopened after corona hahahaha"
       ];
       
       texts.forEach((text, index) => {
