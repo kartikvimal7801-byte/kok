@@ -82,6 +82,25 @@ document.addEventListener("DOMContentLoaded", () => {
         p.style.animationDelay = `${index * 0.2}s`;
         pageContent.appendChild(p);
       });
+    } else if (pageNum === 3) {
+      const texts = [
+        "i know i gave this to you one day late and its my bad, these things take alot of time to make and publsh.",
+        "i think i have some chocolates in my bags, i will mail them to you through gmail trust me"
+      ];
+
+      texts.forEach((text, index) => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        p.style.fontSize = "1rem";
+        p.style.color = "#444";
+        p.style.fontWeight = "600";
+        p.style.lineHeight = "1.8";
+        p.style.marginBottom = "18px";
+        p.style.animation = `fadeInText 0.8s ease-out forwards`;
+        p.style.animationDelay = `${index * 0.2}s`;
+        pageContent.appendChild(p);
+      });
+
     } else {
       // Regular lines for other pages
       for (let i = 0; i < 10; i++) {
