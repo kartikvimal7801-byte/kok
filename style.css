@@ -832,3 +832,162 @@ body::before {
 
 
 
+
+
+
+
+
+
+
+
+
+/* ────────────────────────────────────────────────
+   Stronger mobile fixes – try this version
+──────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+
+  body {
+    align-items: flex-start;          /* stop perfect vertical center on small screens */
+    padding-top: 2vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .page-container {
+    align-items: flex-start;
+    padding: 1vh 0;
+  }
+
+  .card-front,
+  .card-content,
+  .cake-page {
+    width: 94vw !important;
+    max-width: 420px;
+    min-width: 300px;
+    height: auto !important;          /* ← very important: let content decide height */
+    min-height: 80vh;
+    max-height: 95vh;
+    margin: 1vh auto;
+    padding: 5vw 4.5vw;
+    border-radius: 14px;
+    overflow-y: auto;                 /* scroll inside card if needed */
+    box-sizing: border-box;
+  }
+
+  /* Front page */
+  .card-front {
+    gap: 6vh;
+  }
+
+  .birthday-text {
+    font-size: clamp(2.6rem, 11vw, 4.8rem);
+    line-height: 1.1;
+  }
+
+  /* Text pages */
+  .page-lines {
+    padding: 3vw;
+    gap: 4vw;
+  }
+
+  .page-lines p {
+    font-size: clamp(1.05rem, 4.2vw, 1.3rem) !important;
+    line-height: 1.7;
+    margin-bottom: 4vw !important;
+  }
+
+  /* Buttons – bigger tap targets */
+  .card-btn,
+  .nav-btn,
+  .cake-btn {
+    padding: 16px 32px !important;
+    font-size: clamp(1.05rem, 4vw, 1.18rem) !important;
+    min-height: 54px;
+    min-width: 160px;
+    border-radius: 999px;
+    touch-action: manipulation;
+  }
+
+  .button-group,
+  .button-row,
+  .page-controls {
+    flex-direction: column !important;
+    gap: 18px !important;
+    align-items: center;
+  }
+
+  .page-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  /* Cake page specific */
+  .cake-container {
+    padding: 4vw;
+    gap: 6vw;
+  }
+
+  .cake {
+    width: 38vw;
+    max-width: 160px;
+    height: 32vw;
+    max-height: 130px;
+  }
+
+  .candle {
+    top: -10vw;
+    height: 10vw;
+    max-height: 38px;
+  }
+
+  .flame {
+    top: -7vw;
+    width: 3.2vw;
+    height: 8vw;
+    max-width: 14px;
+    max-height: 32px;
+  }
+
+  .gift-message {
+    font-size: clamp(1.1rem, 4.3vw, 1.35rem);
+    padding: 3vw 4vw;
+  }
+
+  /* Big text overlays */
+  .bye-text {
+    font-size: clamp(3.5rem, 14vw, 6rem);
+  }
+
+  .error-content h2 {
+    font-size: clamp(2.4rem, 10vw, 3.8rem);
+  }
+
+  .error-content p {
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+  }
+
+  /* Reduce heavy animations on mobile */
+  .card-content,
+  .cake-page {
+    animation: none !important;     /* remove fold animation if laggy */
+  }
+}
+
+@media (max-width: 420px) {
+  .card-front,
+  .card-content,
+  .cake-page {
+    padding: 6vw 5vw;
+  }
+
+  .nav-btn,
+  .cake-btn {
+    padding: 14px 28px;
+    min-height: 50px;
+  }
+}
+
+
+
+
