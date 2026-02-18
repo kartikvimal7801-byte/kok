@@ -829,3 +829,47 @@ body::before {
 }
 
 
+/* --- Mobile Responsive Fix --- */
+@media (max-width: 600px) {
+  body {
+    height: auto; /* allow scrolling */
+    overflow: auto;
+    padding: 20px 0;
+  }
+
+  .card-front,
+  .card-content {
+    width: 90% !important;  /* scale down width */
+    height: auto !important; /* auto height for smaller screens */
+    padding: 20px !important;
+  }
+
+  .page-lines {
+    padding: 10px !important;
+  }
+
+  .birthday-text {
+    font-size: 2.5rem !important; /* scale down text */
+  }
+
+  .card-btn,
+  .cake-btn,
+  .nav-btn {
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .cake {
+    width: 120px !important;
+    height: 100px !important;
+  }
+
+  .flame {
+    width: 10px !important;
+    height: 25px !important;
+  }
+
+  .gift-message {
+    font-size: 1rem !important;
+  }
+}
