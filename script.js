@@ -1,162 +1,325 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // === Scenes ===
-  const introScene = document.getElementById("introScene");
-  const cakeScene = document.getElementById("cakeScene");
-  const revealScene = document.getElementById("revealScene");
+  // === Pages Config ===
+  const totalPages = 4;
+  let currentPage = 1;
+  let isAnimating = false;
 
-  // === Intro elements ===
-  const introBtn = document.getElementById("introBtn");
-  const introTextContainer = document.getElementById("introText");
-
-  // === Cake elements ===
-  const lightBtn = document.getElementById("lightBtn");
-  const flame = document.getElementById("flame");
-  const clickMeBtn = document.getElementById("nextBtn"); // renamed for clarity
-
-  // === Reveal elements ===
-  const showBtn = document.getElementById("showBtn");
-  const bigReveal = document.getElementById("bigReveal");
-
-  // === Balloon container ===
+  // === DOM Elements ===
+  const frontPage = document.getElementById("frontPage");
+  const cardPages = document.getElementById("cardPages");
+  const pageNumber = document.getElementById("pageNumber");
+  const pageContent = document.getElementById("pageContent");
+  const cardContent = document.querySelector("#regularContent");
+  const cakePage = document.getElementById("cakePage");
   const balloonContainer = document.getElementById("balloonContainer");
 
-  // === Intro messages & button flow ===
-  const messages = [
-    "Today is not just another day.",
-    "It's the day someone special entered the world.",
-    "i wonder who is this person :O",
-    "Some people make ordinary days feel lighter just by being in them."
-  ];
-  const buttonFlow = ["Click again", "One more time", "Celebrate"];
-  let step = 0;
+  // === Buttons ===
+  const openCardBtn = document.getElementById("openCardBtn");
+  const turnPageBtn = document.getElementById("turnPageBtn");
+  const nextPageBtn = document.getElementById("nextPageBtn");
+  const prevPageBtn = document.getElementById("prevPageBtn");
+  const closeCardBtn = document.getElementById("closeCardBtn");
+  const lightBtn = document.getElementById("lightBtn");
+  const celebrateBtn = document.getElementById("celebrateBtn");
+  const prevPageBtn2 = document.getElementById("prevPageBtn2");
+  const closeCardBtn2 = document.getElementById("closeCardBtn2");
+  const flame = document.getElementById("flame");
+  const giftMessage = document.getElementById("giftMessage");
+  const starsEffect = document.getElementById("starsEffect");
+  const darkOverlay = document.getElementById("darkOverlay");
+  const byeText = document.getElementById("byeText");
+  const errorMessage = document.getElementById("errorMessage");
+  const fullScreenBlack = document.getElementById("fullScreenBlack");
 
-  // === Intro button click ===
-  introBtn.addEventListener("click", () => {
-    if (!introTextContainer) return;
+  // === Balloon colors ===
+  const balloonColors = ["#ff6b9d", "#ffd06f", "#9cd6ff", "#b19cd9", "#ff9cc2"];
 
-    if (step < messages.length) {
-      const p = document.createElement("p");
-      p.textContent = messages[step];
-      introTextContainer.appendChild(p);
+  // === Initialize ===
+  renderPage(1);
 
-      if (step < buttonFlow.length) {
-        introBtn.textContent = buttonFlow[step];
-      } else {
-        introBtn.textContent = "Celebrate";
-        introBtn.style.transform = "scale(1.15)";
-        introBtn.style.background = "#ff5fa2";
-      }
-
-      // button jump animation
-      introBtn.classList.remove("jump");
-      void introBtn.offsetWidth;
-      introBtn.classList.add("jump");
-
-      step++;
+  // === Generate Lines for a Page ===
+  function generateLines(pageNum = 1) {
+    pageContent.innerHTML = "";
+    
+    // Special content for page 1
+    if (pageNum === 1) {
+      const texts = [
+        "This is the day someone special joined the world.",
+        "Not just any player — this one stands out.",
+        "There's something different about them, something unique.",
+        "I wonder who this amazing player could be."
+      ];
+      
+      texts.forEach((text, index) => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        p.style.fontSize = "1.1rem";
+        p.style.color = "#c44569";
+        p.style.fontWeight = "bold";
+        p.style.lineHeight = "1.8";
+        p.style.marginBottom = "15px";
+        p.style.animation = `fadeInText 0.8s ease-out forwards`;
+        p.style.animationDelay = `${index * 0.2}s`;
+        pageContent.appendChild(p);
+      });
+    } else if (pageNum === 2) {
+      const texts = [
+        "remember the time u asked me hat how do i know everything abt that one firt house changing story? well lets just say when i have a seroius conersation with someone i remeber every part of it",
+        "in 2019-20 friendship started with \"hello\" but in 2025 it started with \"im your uber driver\", unique way bro. even albert eistien take lessons from me",
+        "my brain was stuck in loading load when the school reopened after corona hahahaha"
+      ];
+      
+      texts.forEach((text, index) => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        p.style.fontSize = "1rem";
+        p.style.color = "#764ba2";
+        p.style.fontWeight = "bold";
+        p.style.lineHeight = "1.8";
+        p.style.marginBottom = "20px";
+        p.style.animation = `fadeInText 0.8s ease-out forwards`;
+        p.style.animationDelay = `${index * 0.2}s`;
+        pageContent.appendChild(p);
+      });
     } else {
-      switchScene(introScene, cakeScene);
+      // Regular lines for other pages
+      for (let i = 0; i < 10; i++) {
+        const lineDiv = document.createElement("div");
+        lineDiv.className = "line";
+        pageContent.appendChild(lineDiv);
+      }
     }
-  });
-
-  // === Balloon types ===
-  const balloonData = [
-    {text: "Avni", color: "#ff9cc2"},
-    {text: "Happy", color: "#ffd06f"},
-    {text: "Birthday", color: "#9cd6ff"}
-  ];
-
-  // === Start many balloons continuously ===
-  function startManyBalloons() {
-    setInterval(() => {
-      const count = 3 + Math.floor(Math.random() * 3); // 3–5 balloons per batch
-      for (let i = 0; i < count; i++) createBalloon();
-    }, 300);
   }
 
-  // === Create a single balloon with string and text above ===
+  // === Create a balloon ===
   function createBalloon() {
-    const data = balloonData[Math.floor(Math.random() * balloonData.length)];
-
+    const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
     const wrapper = document.createElement("div");
     wrapper.className = "balloon-wrapper";
-
+    
     const text = document.createElement("div");
     text.className = "balloon-text";
-    text.textContent = data.text;
-
+    text.textContent = ["Happy", "Birthday", "Yay!", "Fun!"][Math.floor(Math.random() * 4)];
+    
     const balloon = document.createElement("div");
     balloon.className = "balloon";
-    balloon.style.background = data.color;
-
-    const stringEl = document.createElement("div");
-    stringEl.className = "balloon-string";
-
+    balloon.style.background = color;
+    
+    const string = document.createElement("div");
+    string.className = "balloon-string";
+    
     wrapper.appendChild(text);
     wrapper.appendChild(balloon);
-    wrapper.appendChild(stringEl);
-
-    const left = Math.random() * (window.innerWidth - 60);
-    wrapper.style.left = left + "px";
-
-    const duration = 3 + Math.random() * 2; // faster float
+    wrapper.appendChild(string);
+    
+    const left = Math.random() * 100;
+    wrapper.style.left = left + "%";
+    const duration = 4 + Math.random() * 2;
+    wrapper.style.setProperty("--tx", (Math.random() - 0.5) * 100 + "px");
     wrapper.style.animationDuration = duration + "s";
-
+    
     balloonContainer.appendChild(wrapper);
-
+    
     setTimeout(() => wrapper.remove(), duration * 1000);
   }
 
-  // === Light cake ===
-  lightBtn.addEventListener("click", () => {
-    flame.classList.add("active");
-    startManyBalloons();
-    lightBtn.classList.add("hidden");
-
-    // === Big birthday text ===
-    const bigText = document.createElement("div");
-    bigText.textContent = "HAPPYYYYY BIRTHDAYYY";
-    bigText.style.fontSize = "2.2rem";
-    bigText.style.color = "#ff69b4";
-    bigText.style.fontWeight = "bold";
-    bigText.style.marginBottom = "10px";
-    bigText.style.textAlign = "center";
-    bigText.style.animation = "fadeIn 1s ease";
-    cakeScene.querySelector(".center").prepend(bigText);
-
-    // === Cute, mature one-line message ===
-    const smallMessage = document.createElement("div");
-    smallMessage.textContent = "May your days always feel as bright and joyful as you make everyone around you.";
-    smallMessage.style.fontSize = "1rem";
-    smallMessage.style.color = "#444";
-    smallMessage.style.textAlign = "center";
-    smallMessage.style.marginBottom = "10px";
-    smallMessage.style.animation = "fadeIn 1s ease";
-    cakeScene.querySelector(".center").prepend(smallMessage);
-
-    // === Show "Click me" button bigger and blue ===
-    clickMeBtn.style.background = "#3399ff";
-    clickMeBtn.style.color = "#fff";
-    clickMeBtn.style.padding = "16px 32px";
-    clickMeBtn.style.fontSize = "1.2rem";
-    clickMeBtn.classList.remove("hidden");
-  });
-
-  // === Next scene ===
-  clickMeBtn.addEventListener("click", () => {
-    switchScene(cakeScene, revealScene);
-  });
-
-  // === Show reveal ===
-  showBtn.addEventListener("click", () => {
-    document.body.style.filter = "brightness(0.9)";
-    bigReveal.classList.add("show");
-  });
-
-  // === Switch scene helper ===
-  function switchScene(from, to) {
-    from.classList.remove("active");
-    setTimeout(() => to.classList.add("active"), 500);
+  // === Start balloons ===
+  function startBalloons() {
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => createBalloon(), i * 300);
+    }
+    const balloonInterval = setInterval(() => {
+      for (let i = 0; i < 2; i++) {
+        createBalloon();
+      }
+    }, 400);
+    
+    setTimeout(() => clearInterval(balloonInterval), 15000);
   }
+
+  // === Render Page ===
+  function renderPage(pageNum) {
+    currentPage = pageNum;
+    
+    if (pageNum === 4) {
+      // Show cake page
+      cardContent.classList.add("hidden");
+      cardContent.style.display = "none";
+      cakePage.classList.remove("hidden");
+      cakePage.style.display = "flex";
+      flame.classList.remove("burning");
+      lightBtn.classList.remove("hidden");
+      celebrateBtn.classList.add("hidden");
+      balloonContainer.innerHTML = "";
+      prevPageBtn2.disabled = false;
+    } else {
+      // Show text pages
+      cakePage.classList.add("hidden");
+      cakePage.style.display = "none";
+      cardContent.classList.remove("hidden");
+      cardContent.style.display = "flex";
+      pageNumber.textContent = pageNum;
+      generateLines(pageNum);
+      nextPageBtn.disabled = pageNum === totalPages;
+      prevPageBtn.disabled = pageNum === 1;
+    }
+  }
+
+  // === Page Turn Animation ===
+  function turnPageWithAnimation(newPageNum) {
+    if (isAnimating || newPageNum === currentPage) return;
+    if (newPageNum < 1 || newPageNum > totalPages) return;
+    
+    isAnimating = true;
+    const currentCard = currentPage === 4 ? cakePage : cardContent;
+    const nextCard = newPageNum === 4 ? cakePage : cardContent;
+    
+    currentCard.style.animation = "none";
+    void currentCard.offsetWidth; // Force reflow
+    
+    const isNextPage = newPageNum > currentPage;
+    if (isNextPage) {
+      currentCard.style.animation = "pageFlipForward 0.8s ease-out";
+    } else {
+      currentCard.style.animation = "pageFlipBackward 0.8s ease-out";
+    }
+    
+    setTimeout(() => {
+      renderPage(newPageNum);
+    }, 400);
+    
+    setTimeout(() => {
+      isAnimating = false;
+      currentCard.style.animation = "none";
+    }, 800);
+  }
+
+  // === Navigate Pages ===
+  nextPageBtn.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      turnPageWithAnimation(currentPage + 1);
+    }
+  });
+
+  prevPageBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      turnPageWithAnimation(currentPage - 1);
+    }
+  });
+
+  prevPageBtn2.addEventListener("click", () => {
+    if (currentPage > 1) {
+      turnPageWithAnimation(currentPage - 1);
+    }
+  });
+
+  // === Open Card ===
+  openCardBtn.addEventListener("click", () => {
+    frontPage.classList.remove("active");
+    cardPages.classList.add("active");
+    openCardBtn.classList.add("hidden");
+    turnPageBtn.classList.remove("hidden");
+    turnPageBtn.classList.add("visible");
+  });
+
+  // === Turn Page from Front ===
+  turnPageBtn.addEventListener("click", () => {
+    frontPage.classList.remove("active");
+    cardPages.classList.add("active");
+  });
+
+  // === Close Card ===
+  function closeCard() {
+    cardPages.classList.remove("active");
+    frontPage.classList.add("active");
+    renderPage(1);
+    openCardBtn.classList.remove("hidden");
+    turnPageBtn.classList.add("hidden");
+    turnPageBtn.classList.remove("visible");
+    flame.classList.remove("burning");
+    balloonContainer.innerHTML = "";
+    cakePage.classList.remove("shake");
+    starsEffect.classList.add("hidden");
+    starsEffect.classList.remove("active");
+    darkOverlay.classList.add("hidden");
+    darkOverlay.classList.remove("active");
+    byeText.classList.add("hidden");
+    byeText.classList.remove("active");
+    errorMessage.classList.add("hidden");
+    errorMessage.classList.remove("active");
+    fullScreenBlack.classList.add("hidden");
+    fullScreenBlack.classList.remove("active");
+  }
+
+  closeCardBtn.addEventListener("click", closeCard);
+  closeCardBtn2.addEventListener("click", closeCard);
+
+  // === Create Stars ===
+  function createStars() {
+    starsEffect.innerHTML = "";
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.style.left = Math.random() * 100 + "%";
+      star.style.top = Math.random() * 100 + "%";
+      star.style.setProperty("--tx", (Math.random() - 0.5) * 200 + "px");
+      star.style.setProperty("--ty", (Math.random() - 0.5) * 200 + "px");
+      starsEffect.appendChild(star);
+    }
+  }
+
+  // === Special Ending Sequence ===
+  function triggerSpecialEnding() {
+    // Start shaking
+    cakePage.classList.add("shake");
+    
+    // Show stars
+    starsEffect.classList.remove("hidden");
+    createStars();
+    starsEffect.classList.add("active");
+    
+    // Wait then show full-screen black
+    setTimeout(() => {
+      fullScreenBlack.classList.remove("hidden");
+      fullScreenBlack.classList.add("active");
+    }, 800);
+    
+    // Show bye text
+    setTimeout(() => {
+      byeText.classList.remove("hidden");
+      byeText.classList.add("active");
+    }, 1400);
+    
+    // Show error message
+    setTimeout(() => {
+      cakePage.classList.remove("shake");
+      errorMessage.classList.remove("hidden");
+      errorMessage.classList.add("active");
+    }, 2200);
+  }
+
+  // === Light Cake ===
+  lightBtn.addEventListener("click", () => {
+    flame.classList.add("burning");
+    lightBtn.classList.add("hidden");
+    celebrateBtn.classList.remove("hidden");
+    giftMessage.classList.remove("hidden");
+    startBalloons();
+    
+    // Trigger special ending after 3 seconds
+    setTimeout(() => {
+      triggerSpecialEnding();
+    }, 3000);
+  });
+
+  // === Celebrate ===
+  celebrateBtn.addEventListener("click", () => {
+    celebrateBtn.style.transform = "scale(1.2)";
+    setTimeout(() => {
+      celebrateBtn.style.transform = "scale(1)";
+    }, 100);
+    startBalloons();
+  });
 
 });
