@@ -830,3 +830,107 @@ body::before {
 
 
 
+/* ────────────────────────────────────────────────
+   Mobile responsive adjustments – minimal changes
+──────────────────────────────────────────────── */
+
+@media (max-width: 650px) {
+
+  /* Main card containers – make them fit screen */
+  .card-front,
+  .card-content,
+  .cake-page {
+    width: 92vw;
+    max-width: 480px;
+    min-width: 320px;
+    height: 90vh;
+    max-height: 780px;
+    margin: 2vh auto;
+    padding: 4vw;
+    border-radius: 16px;
+  }
+
+  /* Front page birthday text */
+  .birthday-text {
+    font-size: clamp(2.8rem, 9vw, 4.2rem);
+  }
+
+  /* Page content text */
+  .page-lines p {
+    font-size: clamp(1rem, 3.8vw, 1.15rem);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  /* Buttons – make them easier to tap */
+  .card-btn,
+  .nav-btn,
+  .cake-btn {
+    padding: 14px 28px;
+    font-size: clamp(1rem, 3.5vw, 1.1rem);
+    min-width: 140px;
+    touch-action: manipulation;
+  }
+
+  .button-group,
+  .button-row,
+  .page-controls {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .page-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Cake section */
+  .cake {
+    width: 120px;
+    height: 100px;
+  }
+
+  .candle {
+    top: -36px;
+    height: 32px;
+  }
+
+  .flame {
+    top: -22px;
+    width: 11px;
+    height: 26px;
+  }
+
+  .gift-message {
+    font-size: clamp(1.05rem, 3.6vw, 1.25rem);
+    padding: 12px;
+  }
+
+  /* Bye / error screens */
+  .bye-text {
+    font-size: clamp(3rem, 12vw, 5rem);
+  }
+
+  .error-content h2 {
+    font-size: clamp(2.2rem, 8vw, 3.2rem);
+  }
+
+  .error-content p {
+    font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+  }
+}
+
+/* Extra safety for very small phones */
+@media (max-width: 380px) {
+  .card-front,
+  .card-content,
+  .cake-page {
+    padding: 5vw 4vw;
+  }
+
+  .nav-btn,
+  .cake-btn {
+    padding: 12px 24px;
+    font-size: 0.98rem;
+  }
+}
